@@ -1,9 +1,9 @@
 {
-  "name": "APP_NAME",
-  "description": "APP_DESC",
-  "repository": "",
+  "name": "timer",
+  "description": "timer app",
+  "repository": "https://github.com/pietrek777/timer.git",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
   "license": "MIT",
   "scripts": {
     "build": "webpack",
@@ -26,5 +26,6 @@
     "style-loader": "0.18.2",
     "webpack": "3.1.0",
     "webpack-dev-server": "2.5.1"
-  }
+  },
+  "author": "Piotr Kłopotowski <pietrek777@gmail.com>"
 }
