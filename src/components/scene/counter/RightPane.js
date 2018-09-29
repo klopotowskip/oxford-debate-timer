@@ -1,5 +1,7 @@
 import React from 'react';
 
+import UsersRight from './UsersRight';
+
 export default class RightPane extends React.Component {
   constructor(props){
     super(props);
@@ -10,7 +12,10 @@ export default class RightPane extends React.Component {
 
     return (
       <div>
-        RightPane
+        <UsersRight
+          currentUser = {this.props.currentUser}
+          isLeft = {this.props.isLeft}
+        />
       </div>
     );
   }

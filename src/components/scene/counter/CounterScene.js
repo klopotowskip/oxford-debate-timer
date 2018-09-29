@@ -1,9 +1,5 @@
 import React from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser as userActive } from '@fortawesome/free-regular-svg-icons';
-import { faUser as userInactive } from '@fortawesome/free-solid-svg-icons';
-
 import LeftPane from './LeftPane';
 import RightPane from './RightPane';
 
@@ -13,12 +9,16 @@ const timeUp = "Koniec czasu";
 export default class CounterScene extends React.Component {
 
   state = {
-    isleft: true,
-    user: 1,
-    counter :{
-
-    }
+    isLeft: false,
+    currentUser: 3
   }
+  /*componentDidMount(){
+    this.setState((state) => ({
+      isleft: true,
+      currentUser: 1
+    }));
+    console.log('done');
+  }*/
 
   updateLeftUserPane = () => {
 
@@ -29,20 +29,19 @@ export default class CounterScene extends React.Component {
   }
 
   render(){
-
     return (
       <div className="main-container">
         <div className="left-pane">
           <LeftPane
             isLeft={this.state.isLeft}
-            user={this.state.user}
+            currentUser={this.state.currentUser}
             updateLeftUserPane = {this.updateLeftUserPane}
           />
         </div>
         <div className="right-pane">
           <RightPane
             isLeft={this.state.isLeft}
-            user={this.state.user}
+            currentUser={this.state.currentUser}
             updateRightUserPane = {this.updateRightUserPane}
           />
         </div>
