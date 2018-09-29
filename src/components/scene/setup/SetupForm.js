@@ -4,7 +4,14 @@ export default class SetupForm extends React.Component {
 
   processSetupSettings = (e) => {
     e.preventDefault();
-    this.props.processSetupSettings();
+
+    const topic = e.target.elements.topic.value.trim();
+    const lduration = e.target.elements.lduration.value;
+    const squantity = e.target.elements.squantity.value;
+    const sduration = e.target.elements.sduration.value;
+
+
+    this.props.processSetupSettings(topic, lduration, squantity, sduration);
   }
   render(){
     return (

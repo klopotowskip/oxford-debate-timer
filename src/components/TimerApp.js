@@ -33,11 +33,23 @@ export default class TimerApp extends React.Component {
           (() => {
             switch(this.state.scene){
               case SCENE_SETUP:
-                return <SetupScene processSetupSettings={this.processSetupSettings} />;
+                return (
+                  <SetupScene
+                    processSetupSettings={this.processSetupSettings}
+                  />
+                );
               case SCENE_COUNTER:
-                return <CounterScene />;
+                return (
+                  <CounterScene
+                    metadata={this.state.metadata}
+                  />
+                );
               default:
-                return <div>Error</div>;
+                return (
+                  <SetupScene
+                    processSetupSettings={this.processSetupSettings}
+                  />
+                );
             }
           })()
         }
