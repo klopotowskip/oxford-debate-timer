@@ -22,15 +22,15 @@ export default class SetupForm extends React.Component {
           <div className="lduration-radio">
             <span className="lduration-radio__title">lduration</span>
             <div>
-              <input type="radio" id="lduration-3min" name="lduration" value="180"/>
+              <input type="radio" id="lduration-3min" name="lduration" value="1800"/>
               <label htmlFor="lduration-3min">3 min</label>
             </div>
             <div>
-              <input type="radio" id="lduration-4min" name="lduration" value="240" defaultChecked/>
+              <input type="radio" id="lduration-4min" name="lduration" value="2400" defaultChecked/>
               <label htmlFor="lduration-4min">4 min</label>
             </div>
             <div>
-              <input type="radio" id="lduration-5min" name="lduration" value="300"/>
+              <input type="radio" id="lduration-5min" name="lduration" value="3000"/>
               <label htmlFor="lduration-5min">5 min</label>
             </div>
           </div>
@@ -53,15 +53,15 @@ export default class SetupForm extends React.Component {
           <div className="sduration-radio">
             <span className="sduration-radio__title">sduration</span>
             <div>
-              <input type="radio" id="sduration-30s" name="sduration" value="30"/>
+              <input type="radio" id="sduration-30s" name="sduration" value="300"/>
               <label htmlFor="sduration-30s">30 s</label>
             </div>
             <div>
-              <input type="radio" id="sduration-1min" name="sduration" value="60" defaultChecked/>
+              <input type="radio" id="sduration-1min" name="sduration" value="600" defaultChecked/>
               <label htmlFor="sduration-1min">1 min</label>
             </div>
             <div>
-              <input type="radio" id="sduration-2min" name="sduration" value="120"/>
+              <input type="radio" id="sduration-2min" name="sduration" value="1200"/>
               <label htmlFor="sduration-2min">2 min</label>
             </div>
 
