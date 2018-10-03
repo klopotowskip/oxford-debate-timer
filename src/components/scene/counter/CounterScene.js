@@ -10,17 +10,27 @@ const LEFT_STATE = "PRO";
 const RIGHT_STATE = "CONTRA";
 
 export default class CounterScene extends React.Component {
-
   timeout = undefined;
 
-  constructor(props){
-    super();
-    this.onKeyUp = this.handleKeyUp;
+  onKeyUp = (e) => {
+    if(e.key === " "){
+      console.log("space");
+      if(this.state.paused) this.resumeTimer();
+      else this.pauseTimer();
+    }
+  }
+  componentDidMount(){
+    document.addEventListener('keyup', this.onKeyUp);
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener('keyup', this.onKeyUp);
   }
 
   state = {
     isLeft: true,
     currentUser: 1,
+    paused: true,
 //    time: this.props.metadata.lduration
     time: 100
   }
@@ -76,13 +86,41 @@ export default class CounterScene extends React.Component {
     return text + "." + dseconds;
   }
 
-  countdown = () => {
-    this.setState((prevState) => ({ time: prevState.time - 1 }));
-    if(this.state.time > 0) this.timeout = window.setTimeout(this.countdown, 100);
+  //TESTING
+  testCountdown = () => {
+    this.startTimer(100);
   }
 
-  stopTimer = () => {
-    window.clearTimeout(this.timeout);
+  startTimer = (time) => {
+    this.setState({
+      paused: false,
+      time
+    }, () => {
+      this.countdown();
+    });
+  }
+
+  countdown = () => {
+    this.setState((prevState) => ({ time: prevState.time - 1 }));
+    if(this.state.time > 0 && (!this.state.paused)){
+      this.timeout = window.setTimeout(this.countdown, 100);
+    } else this.pauseTimer();
+  }
+
+
+  pauseTimer = () => {
+    console.log("pause");
+    this.setState({ paused: true }, () => {
+      window.clearTimeout(this.timeout);
+    });
+  }
+  resumeTimer = () => {
+    console.log("resume");
+    if(this.state.time){
+      this.setState({ paused: false }, () => {
+        this.countdown();
+      });
+    }
   }
 
   render(){
@@ -113,8 +151,8 @@ export default class CounterScene extends React.Component {
         </div>
         <button onClick={this.nextUser}>Next</button>
         <button onClick={this.reset}>Reset</button>
-        <button onClick={this.countdown}>Countdown</button>
-        <button onClick={this.stopTimer}>Stop</button>
+        <button onClick={this.testCountdown}>Countdown</button>
+        <button onClick={this.pauseTimer}>Stop</button>
       </div>
     );
   }
