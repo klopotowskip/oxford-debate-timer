@@ -9,14 +9,22 @@ const TIME_UP = "Koniec czasu";
 const LEFT_STATE = "PRO";
 const RIGHT_STATE = "CONTRA";
 
+const LONG_SPEECH = "long";
+const SHORT_SPEECH = "short";
+
 export default class CounterScene extends React.Component {
   timeout = undefined;
+  defaultLifecycle = [];
+
 
   onKeyUp = (e) => {
     if(e.key === " "){
       console.log("space");
       if(this.state.paused) this.resumeTimer();
       else this.pauseTimer();
+    } else if(e.key === "Enter"){
+      if(!this.state.paused) this.pauseTimer();
+      this.pushQueue()
     }
   }
   componentDidMount(){
@@ -32,15 +40,18 @@ export default class CounterScene extends React.Component {
     currentUser: 1,
     paused: true,
 //    time: this.props.metadata.lduration
-    time: 100
+    time: 100,
+// First sppeech is loaded on startup
+    queue: [
+      LONG_SPEECH,
+      LONG_SPEECH,
+      LONG_SPEECH,
+      LONG_SPEECH,
+      LONG_SPEECH,
+      LONG_SPEECH,
+      LONG_SPEECH
+    ]
   }
-  /*componentDidMount(){
-    this.setState((state) => ({
-      isleft: true,
-      currentUser: 1
-    }));
-    console.log('done');
-  }*/
   nextUser = () => {
     if(this.state.isLeft){
       this.setState(() => ({ isLeft: false }));
@@ -121,6 +132,14 @@ export default class CounterScene extends React.Component {
         this.countdown();
       });
     }
+  }
+
+  pushQueue = () => {
+    let queue = [...this.state.queue];
+    const newElement = queue.pop();
+    this.setState({queue}, () => {
+      this.nextUser();
+    });
   }
 
   render(){
