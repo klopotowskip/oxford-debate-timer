@@ -3,7 +3,10 @@ import React from 'react';
 import LeftPane from './LeftPane';
 import RightPane from './RightPane';
 
-const TIME_LEFT = "Pozostało czasu:";
+import Side from '~/src/data/Side';
+
+import { counterMessages as messages } from '~/src/components/messages/pl-PL/counter-messages';
+
 const TIME_UP = "Koniec czasu";
 
 const END_OF_EVENT = "Koniec debaty";
@@ -18,6 +21,8 @@ const LEFT_SIDE = "left";
 const RIGHT_SIDE = "right";
 
 const SHORT = "ad vocem";
+
+console.log(messages.LEFT_SIDE);
 
 export default class CounterScene extends React.Component {
   timeout = undefined;
@@ -49,7 +54,7 @@ export default class CounterScene extends React.Component {
     currentUser: 1,
     paused: true,
     time: parseInt(this.props.metadata.lduration),
-    timerHeader: TIME_LEFT,
+    timerHeader: messages.TIME_LEFT,
 // First speech is loaded on startup
     queue: [
       LONG_SPEECH,
@@ -93,7 +98,7 @@ export default class CounterScene extends React.Component {
 
   getTimerHeader = () => {
     // TODO: Implement this method!
-    return TIME_LEFT;
+    return messages.TIME_LEFT;
   }
 
   getTimerState = () => {
