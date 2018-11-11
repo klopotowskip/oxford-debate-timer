@@ -17,10 +17,6 @@ export default class LeftPane extends React.Component {
       `${seconds}"`;
   }
 
-  preventFocus = (e) => {
-    e.preventDefault();
-  }
-
   render(){
     let users = [];
     let shorts = [];
@@ -48,7 +44,15 @@ export default class LeftPane extends React.Component {
     let shortLabel = this.getShortButtonLabel();
     for(let i = 0; i < this.props.shortsAvailable; i++){
       let id = `short-button-left-${i}`;
-      shorts.push(<button key={id} id={id} className="short-button" onClick={this.props.handleUseShort} onFocus={this.preventFocus} tabIndex="-1">{shortLabel}</button>);
+      shorts.push(
+        <button
+          key={id}
+          id={id}
+          className="short-button"
+          onClick={this.props.handleUseShort}
+          tabIndex="-1">
+          {shortLabel}
+        </button>);
     }
 
     return (

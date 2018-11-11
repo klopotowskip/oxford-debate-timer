@@ -6,10 +6,6 @@ import { faUser as userActive } from '@fortawesome/free-solid-svg-icons';
 
 export default class RightPane extends React.Component {
 
-  preventFocus = (e) => {
-    e.preventDefault();
-  }
-
   getShortButtonLabel = () => {
     let duration = this.props.shortDuration;
     let seconds = (duration % 600) / 10;
@@ -48,7 +44,15 @@ export default class RightPane extends React.Component {
     let shortLabel = this.getShortButtonLabel();
     for(let i = 0; i < this.props.shortsAvailable; i++){
       let id = `short-button-right-${i}`;
-      shorts.push(<button key={id} id={id} className="short-button" onClick={this.props.handleUseShort} onFocus={this.preventFocus} tabIndex="-1">{shortLabel}</button>);
+      shorts.push(
+        <button
+          key={id}
+          id={id}
+          className="short-button"
+          onClick={this.props.handleUseShort}
+          tabIndex="-1">
+          {shortLabel}
+        </button>);
     }
     return (
       <div>

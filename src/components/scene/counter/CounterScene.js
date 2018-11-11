@@ -64,7 +64,7 @@ export default class CounterScene extends React.Component {
     rightShorts: parseInt(this.props.metadata.squantity),
     inShort: false,
     shortQueued: false,
-    shortSide: null,
+    shortSide: `none`,
     hasStarted: false,
   }
   nextUser = () => {
@@ -171,6 +171,7 @@ export default class CounterScene extends React.Component {
       queue,
       inShort,
       shortQueued : false,
+      shortSide: null,
       hasStarted: false
     }, () => {
       if(newElement === LONG_SPEECH){
@@ -188,6 +189,7 @@ export default class CounterScene extends React.Component {
     this.setState((prevState) => ({
       leftShorts: prevState.leftShorts - 1,
       shortQueued: true,
+      shortSide: `left`,
       queue: [...prevState.queue, SHORT_SPEECH]
     }));
   }
@@ -200,6 +202,7 @@ export default class CounterScene extends React.Component {
     this.setState((prevState) => ({
       rightShorts: prevState.rightShorts - 1,
       shortQueued: true,
+      shortSide: `right`,
       queue: [...prevState.queue, SHORT_SPEECH]
     }));
 
