@@ -6,11 +6,18 @@ import RightPane from './RightPane';
 const TIME_LEFT = "Pozostało czasu:";
 const TIME_UP = "Koniec czasu";
 
+const END_OF_EVENT = "Koniec debaty";
+
 const LEFT_STATE = "PRO";
 const RIGHT_STATE = "CONTRA";
 
 const LONG_SPEECH = "long";
 const SHORT_SPEECH = "short";
+
+const LEFT_SIDE = "left";
+const RIGHT_SIDE = "right";
+
+const SHORT = "ad vocem";
 
 export default class CounterScene extends React.Component {
   timeout = undefined;
@@ -19,16 +26,18 @@ export default class CounterScene extends React.Component {
 
   onKeyUp = (e) => {
     if(e.key === " "){
-      console.log("space");
       if(this.state.paused) this.resumeTimer();
       else this.pauseTimer();
     } else if(e.key === "Enter"){
-      if(!this.state.paused) this.pauseTimer();
-      this.pushQueue()
+      if(this.state.paused && this.state.hasStarted) this.pushQueue();
+      else this.pauseTimer();
     }
   }
   componentDidMount(){
-    document.addEventListener('keyup', this.onKeyUp);
+    window.setTimeout(() => {
+      document.addEventListener('keyup', this.onKeyUp);
+    }, 200);
+
   }
 
   componentWillUnmount(){
@@ -39,9 +48,9 @@ export default class CounterScene extends React.Component {
     isLeft: true,
     currentUser: 1,
     paused: true,
-//    time: this.props.metadata.lduration
-    time: 100,
-// First sppeech is loaded on startup
+    time: parseInt(this.props.metadata.lduration),
+    timerHeader: TIME_LEFT,
+// First speech is loaded on startup
     queue: [
       LONG_SPEECH,
       LONG_SPEECH,
@@ -50,7 +59,13 @@ export default class CounterScene extends React.Component {
       LONG_SPEECH,
       LONG_SPEECH,
       LONG_SPEECH
-    ]
+    ],
+    leftShorts: parseInt(this.props.metadata.squantity),
+    rightShorts: parseInt(this.props.metadata.squantity),
+    inShort: false,
+    shortQueued: false,
+    shortSide: null,
+    hasStarted: false,
   }
   nextUser = () => {
     if(this.state.isLeft){
@@ -58,7 +73,8 @@ export default class CounterScene extends React.Component {
     } else {
       if(this.state.currentUser < 4) this.setState((prevState) => ({
         currentUser: prevState.currentUser + 1,
-        isLeft: true
+        isLeft: true,
+        inShort: false
       }));
     }
   }
@@ -71,7 +87,8 @@ export default class CounterScene extends React.Component {
   }
 
   printState = () => {
-    return this.state.currentUser + " " + (this.state.isLeft ? LEFT_STATE : RIGHT_STATE);
+    if(this.state.inShort) return SHORT;
+    else return this.state.currentUser + " " + (this.state.isLeft ? LEFT_STATE : RIGHT_STATE);
   }
 
   getTimerHeader = () => {
@@ -128,18 +145,64 @@ export default class CounterScene extends React.Component {
   resumeTimer = () => {
     console.log("resume");
     if(this.state.time){
-      this.setState({ paused: false }, () => {
+      this.setState({ paused: false, hasStarted: true }, () => {
         this.countdown();
       });
     }
   }
 
   pushQueue = () => {
+    if(this.state.queue.length == 0) return;
     let queue = [...this.state.queue];
     const newElement = queue.pop();
-    this.setState({queue}, () => {
-      this.nextUser();
+
+    let time = 0;
+    switch(newElement){
+      case LONG_SPEECH:
+        time = this.props.metadata.lduration;
+        break;
+      case SHORT_SPEECH:
+        time = this.props.metadata.sduration;
+        break;
+    }
+    let inShort = newElement === SHORT_SPEECH;
+    this.setState({
+      time,
+      queue,
+      inShort,
+      shortQueued : false,
+      hasStarted: false
+    }, () => {
+      if(newElement === LONG_SPEECH){
+        this.nextUser();
+      }
     });
+  }
+
+  handleUseLeftShort = () => {
+    if(this.state.inShort && this.state.shortSide==='left') return;
+    //if(this.state.currentUser === 4) return;
+    if(this.state.isLeft === true) return;
+    if(this.state.shortQueued === true) return;
+
+    this.setState((prevState) => ({
+      leftShorts: prevState.leftShorts - 1,
+      shortQueued: true,
+      queue: [...prevState.queue, SHORT_SPEECH]
+    }));
+  }
+
+  handleUseRightShort = () => {
+    if(this.state.inShort && this.state.shortSide==='right') return;
+    if(this.state.shortQueued === true) return;
+    if(this.state.isLeft === false) return;
+
+    this.setState((prevState) => ({
+      rightShorts: prevState.rightShorts - 1,
+      shortQueued: true,
+      queue: [...prevState.queue, SHORT_SPEECH]
+    }));
+
   }
 
   render(){
@@ -149,6 +212,10 @@ export default class CounterScene extends React.Component {
           <LeftPane
             isLeft={this.state.isLeft}
             currentUser={this.state.currentUser}
+            hideCurrent={this.state.inShort}
+            shortsAvailable={this.state.leftShorts}
+            shortDuration={this.props.metadata.sduration}
+            handleUseShort={this.handleUseLeftShort}
           />
         </div>
         <div className="center-pane">
@@ -166,6 +233,10 @@ export default class CounterScene extends React.Component {
           <RightPane
             isLeft={this.state.isLeft}
             currentUser={this.state.currentUser}
+            hideCurrent={this.state.inShort}
+            shortsAvailable={this.state.rightShorts}
+            shortDuration={this.props.metadata.sduration}
+            handleUseShort={this.handleUseRightShort}
           />
         </div>
         <button onClick={this.nextUser}>Next</button>
