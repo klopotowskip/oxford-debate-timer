@@ -3,4 +3,4 @@ const SpeechType = {
   LONG: 'long'
 }
 
-export default Speech;
+export default SpeechType;

@@ -3,26 +3,18 @@ import React from 'react';
 import LeftPane from './LeftPane';
 import RightPane from './RightPane';
 
-import Side from '~/src/data/Side';
+import Side from '~/src/model/Side';
+import SpeechType from '~/src/model/SpeechType';
+
+import Speech from '~/src/model/Speech'
 
 import { counterMessages as messages } from '~/src/components/messages/pl-PL/counter-messages';
-
-const TIME_UP = "Koniec czasu";
-
-const END_OF_EVENT = "Koniec debaty";
-
-const LEFT_STATE = "PRO";
-const RIGHT_STATE = "CONTRA";
 
 const LONG_SPEECH = "long";
 const SHORT_SPEECH = "short";
 
 const LEFT_SIDE = "left";
 const RIGHT_SIDE = "right";
-
-const SHORT = "ad vocem";
-
-console.log(messages.LEFT_SIDE);
 
 export default class CounterScene extends React.Component {
   timeout = undefined;
@@ -57,13 +49,16 @@ export default class CounterScene extends React.Component {
     timerHeader: messages.TIME_LEFT,
 // First speech is loaded on startup
     queue: [
-      LONG_SPEECH,
-      LONG_SPEECH,
-      LONG_SPEECH,
-      LONG_SPEECH,
-      LONG_SPEECH,
-      LONG_SPEECH,
-      LONG_SPEECH
+      new Speech(SpeechType.LONG, 1, Side.RIGHT),
+
+      new Speech(SpeechType.LONG, 2, Side.LEFT),
+      new Speech(SpeechType.LONG, 2, Side.RIGHT),
+
+      new Speech(SpeechType.LONG, 3, Side.LEFT),
+      new Speech(SpeechType.LONG, 3, Side.RIGHT),
+
+      new Speech(SpeechType.LONG, 4, Side.LEFT),
+      new Speech(SpeechType.LONG, 4, Side.RIGHT),
     ],
     leftShorts: parseInt(this.props.metadata.squantity),
     rightShorts: parseInt(this.props.metadata.squantity),
@@ -92,8 +87,8 @@ export default class CounterScene extends React.Component {
   }
 
   printState = () => {
-    if(this.state.inShort) return SHORT;
-    else return this.state.currentUser + " " + (this.state.isLeft ? LEFT_STATE : RIGHT_STATE);
+    if(this.state.inShort) return messages.SHORT_SPEECH_LABEL;
+    else return this.state.currentUser + " " + (this.state.isLeft ? messages.LEFT_SIDE_LABEL : messages.RIGHT_SIDE_LABEL);
   }
 
   getTimerHeader = () => {
