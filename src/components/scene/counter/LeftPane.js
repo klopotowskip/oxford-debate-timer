@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser as userInactive } from '@fortawesome/free-regular-svg-icons';
 import { faUser as userActive } from '@fortawesome/free-solid-svg-icons';
 
+import Side from '~/src/model/Side';
+
 export default class LeftPane extends React.Component {
 
   getShortButtonLabel = () => {
@@ -17,22 +19,22 @@ export default class LeftPane extends React.Component {
       `${seconds}"`;
   }
 
-  render(){
+  render() {
     let users = [];
     let shorts = [];
 
-    let currentUser = this.props.currentUser;
-    let isLeft = this.props.isLeft;
+    let speaker = this.props.speaker;
+    let side = this.props.side;
     let hideCurrent = this.props.hideCurrent;
 
     for(let i = 1; i <= 4; i++){
       let id = `user-left-${i}`;
-      if(i>currentUser){
+      if(i>speaker){
         users.push(<FontAwesomeIcon key={id} id={id} icon={userActive} className="user-icon user-icon--active" />);
-      } else if(i<currentUser){
+      } else if(i<speaker){
         users.push(<FontAwesomeIcon key={id} id={id} icon={userInactive} className="user-icon user-icon--inactive" />);
       } else {
-        if(isLeft && (!hideCurrent)){
+        if((side === Side.LEFT) && (!hideCurrent)){
           users.push(<FontAwesomeIcon key={id} id={id} icon={userActive} className="user-icon user-icon--current" />);
         } else {
           users.push(<FontAwesomeIcon key={id} id={id} icon={userInactive} className="user-icon user-icon--inactive" />);
@@ -41,7 +43,10 @@ export default class LeftPane extends React.Component {
       }
 
     }
+
     let shortLabel = this.getShortButtonLabel();
+    const isShortDisabled = !(this.props.canUseShort(Side.LEFT));
+
     for(let i = 0; i < this.props.shortsAvailable; i++){
       let id = `short-button-left-${i}`;
       shorts.push(
@@ -50,7 +55,8 @@ export default class LeftPane extends React.Component {
           id={id}
           className="short-button"
           onClick={this.props.handleUseShort}
-          tabIndex="-1">
+          tabIndex="-1"
+          disabled={isShortDisabled}>
           {shortLabel}
         </button>);
     }

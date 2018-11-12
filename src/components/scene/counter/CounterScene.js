@@ -10,26 +10,58 @@ import Speech from '~/src/model/Speech'
 
 import { counterMessages as messages } from '~/src/components/messages/pl-PL/counter-messages';
 
-const LONG_SPEECH = "long";
-const SHORT_SPEECH = "short";
+const INIT_QUEUE = [
+  // First speech is loaded on startup
+  new Speech(SpeechType.LONG, Side.RIGHT, 1),
 
-const LEFT_SIDE = "left";
-const RIGHT_SIDE = "right";
+  new Speech(SpeechType.LONG, Side.LEFT, 2),
+  new Speech(SpeechType.LONG, Side.RIGHT, 2),
+
+  new Speech(SpeechType.LONG, Side.LEFT, 3),
+  new Speech(SpeechType.LONG, Side.RIGHT, 3),
+
+  new Speech(SpeechType.LONG, Side.LEFT, 4),
+  new Speech(SpeechType.LONG, Side.RIGHT, 4),
+];
 
 export default class CounterScene extends React.Component {
-  timeout = undefined;
-  defaultLifecycle = [];
 
+  state = {
 
-  onKeyUp = (e) => {
-    if(e.key === " "){
-      if(this.state.paused) this.resumeTimer();
-      else this.pauseTimer();
-    } else if(e.key === "Enter"){
-      if(this.state.paused && this.state.hasStarted) this.pushQueue();
-      else this.pauseTimer();
-    }
+    //Current speaker number (integers from 1 to 4)
+    speaker: 1,
+    //Current speaker team
+    side: Side.LEFT,
+
+    //Defines whether current speech has EVER started
+    hasStarted: false,
+
+    //Defines whether counter is now in short speech time
+    inShort: false,
+
+    //Shows number of available shorts for the teams
+    leftShorts: parseInt(this.props.metadata.squantity),
+    rightShorts: parseInt(this.props.metadata.squantity),
+
+    //Defines whether times is paused RIGHT NOW
+    paused: true,
+
+    //Speeches queue
+    queue: INIT_QUEUE,
+
+    //Defines whether any short is queued as a next speech
+    shortQueued: false,
+
+    //Current timer header
+    timerHeader: messages.TIME_LEFT,
+
+    //Time left for current speech (defined in 1/10 seconds)
+    time: parseInt(this.props.metadata.lduration),
+
   }
+
+  timeout = undefined;
+
   componentDidMount(){
     window.setTimeout(() => {
       document.addEventListener('keyup', this.onKeyUp);
@@ -41,59 +73,35 @@ export default class CounterScene extends React.Component {
     document.removeEventListener('keyup', this.onKeyUp);
   }
 
-  state = {
-    isLeft: true,
-    currentUser: 1,
-    paused: true,
-    time: parseInt(this.props.metadata.lduration),
-    timerHeader: messages.TIME_LEFT,
-// First speech is loaded on startup
-    queue: [
-      new Speech(SpeechType.LONG, 1, Side.RIGHT),
-
-      new Speech(SpeechType.LONG, 2, Side.LEFT),
-      new Speech(SpeechType.LONG, 2, Side.RIGHT),
-
-      new Speech(SpeechType.LONG, 3, Side.LEFT),
-      new Speech(SpeechType.LONG, 3, Side.RIGHT),
-
-      new Speech(SpeechType.LONG, 4, Side.LEFT),
-      new Speech(SpeechType.LONG, 4, Side.RIGHT),
-    ],
-    leftShorts: parseInt(this.props.metadata.squantity),
-    rightShorts: parseInt(this.props.metadata.squantity),
-    inShort: false,
-    shortQueued: false,
-    shortSide: `none`,
-    hasStarted: false,
-  }
-  nextUser = () => {
-    if(this.state.isLeft){
-      this.setState(() => ({ isLeft: false }));
-    } else {
-      if(this.state.currentUser < 4) this.setState((prevState) => ({
-        currentUser: prevState.currentUser + 1,
-        isLeft: true,
-        inShort: false
-      }));
+  onKeyUp = (e) => {
+    if(e.key === " "){
+      if(this.state.paused) this.resumeTimer();
+      else this.pauseTimer(false);
+    } else if(e.key === "Enter"){
+      if(this.state.paused && this.state.hasStarted) this.pushQueue();
+      else this.pauseTimer();
     }
   }
 
   reset = () => {
     this.setState(() => ({
-      currentUser: 1,
-      isLeft: true
+      speaker: 1,
+      side: Side.LEFT,
+      queue: INIT_QUEUE
     }))
   }
 
   printState = () => {
-    if(this.state.inShort) return messages.SHORT_SPEECH_LABEL;
-    else return this.state.currentUser + " " + (this.state.isLeft ? messages.LEFT_SIDE_LABEL : messages.RIGHT_SIDE_LABEL);
-  }
-
-  getTimerHeader = () => {
-    // TODO: Implement this method!
-    return messages.TIME_LEFT;
+    let side;
+    switch(this.state.side){
+      case Side.LEFT:
+        side = messages.LEFT_SIDE_LABEL;
+        break;
+      case Side.RIGHT:
+        side = messages.RIGHT_SIDE_LABEL;
+    }
+    if(this.state.inShort) return side + " – " + messages.SHORT_SPEECH_LABEL;
+    else return this.state.speaker + " " + side;
   }
 
   getTimerState = () => {
@@ -110,6 +118,8 @@ export default class CounterScene extends React.Component {
 
     if(seconds<10) text = text + "0" + seconds;
     else text = text + seconds;
+
+    if(dseconds < 0) return text + ".0";
 
     return text + "." + dseconds;
   }
@@ -132,80 +142,130 @@ export default class CounterScene extends React.Component {
     this.setState((prevState) => ({ time: prevState.time - 1 }));
     if(this.state.time > 0 && (!this.state.paused)){
       this.timeout = window.setTimeout(this.countdown, 100);
-    } else this.pauseTimer();
+    } else {
+      this.pauseTimer(true);
+    }
   }
 
-
-  pauseTimer = () => {
-    console.log("pause");
-    this.setState({ paused: true }, () => {
+  /**
+   * Pauses timer
+   *
+   * @param {boolean} endOfTime - Defines if timer is paused because it's end of time
+   */
+  pauseTimer = (endOfTime) => {
+    const timerHeader = endOfTime ? messages.TIME_UP : messages.TIMER_PAUSED;
+    this.setState({ paused: true, timerHeader: timerHeader }, () => {
       window.clearTimeout(this.timeout);
     });
   }
   resumeTimer = () => {
-    console.log("resume");
     if(this.state.time){
-      this.setState({ paused: false, hasStarted: true }, () => {
+      this.setState({
+        paused: false,
+        hasStarted: true,
+        timerHeader: messages.TIME_LEFT
+      }, () => {
         this.countdown();
       });
     }
   }
 
   pushQueue = () => {
-    if(this.state.queue.length == 0) return;
+    if(this.state.queue.length == 0){
+      this.die();
+      return;
+    }
+    let newSpeech;
     let queue = [...this.state.queue];
-    const newElement = queue.pop();
+    [newSpeech, ...queue] = [...queue];
 
-    let time = 0;
-    switch(newElement){
-      case LONG_SPEECH:
-        time = this.props.metadata.lduration;
+    switch(newSpeech.getType()){
+      case SpeechType.LONG:
+        this.prepareLongSpeech(
+          newSpeech.getSpeaker(),
+          newSpeech.getSide(),
+          queue
+        );
         break;
-      case SHORT_SPEECH:
-        time = this.props.metadata.sduration;
+
+      case SpeechType.SHORT:
+        this.prepareShortSpeech(
+          newSpeech.getSide(),
+          queue
+        );
         break;
     }
-    let inShort = newElement === SHORT_SPEECH;
+  }
+
+  prepareLongSpeech = (speaker, side, queue) => {
     this.setState({
-      time,
+      hasStarted: false,
+      inShort: false,
       queue,
-      inShort,
       shortQueued : false,
-      shortSide: null,
-      hasStarted: false
-    }, () => {
-      if(newElement === LONG_SPEECH){
-        this.nextUser();
-      }
+      side,
+      speaker,
+      time: this.props.metadata.lduration,
+      timerHeader: messages.TIME_LEFT
     });
   }
 
+  prepareShortSpeech = (side, queue) => {
+    this.setState(() => ({
+      side,
+      hasStarted: false,
+      inShort: true,
+      queue,
+      shortQueued : false,
+      time: this.props.metadata.sduration,
+      timerHeader: messages.TIME_LEFT
+    }));
+  }
+
   handleUseLeftShort = () => {
-    if(this.state.inShort && this.state.shortSide==='left') return;
-    //if(this.state.currentUser === 4) return;
-    if(this.state.isLeft === true) return;
-    if(this.state.shortQueued === true) return;
 
     this.setState((prevState) => ({
       leftShorts: prevState.leftShorts - 1,
       shortQueued: true,
-      shortSide: `left`,
-      queue: [...prevState.queue, SHORT_SPEECH]
+      queue: [
+        new Speech(
+          SpeechType.SHORT,
+          Side.LEFT
+        ), ...prevState.queue
+      ]
     }));
   }
 
   handleUseRightShort = () => {
-    if(this.state.inShort && this.state.shortSide==='right') return;
-    if(this.state.shortQueued === true) return;
-    if(this.state.isLeft === false) return;
 
     this.setState((prevState) => ({
       rightShorts: prevState.rightShorts - 1,
       shortQueued: true,
-      shortSide: `right`,
-      queue: [...prevState.queue, SHORT_SPEECH]
+      queue: [
+        new Speech(
+          SpeechType.SHORT,
+          Side.RIGHT
+        ), ...prevState.queue
+      ]
     }));
 
+  }
+
+  canUseShort = (side) => {
+    console.log("SIDE: " + side)
+    console.log("[" + side + "] Condition 1: ", this.state.side !== side);
+    console.log("[" + side + "] Condition 2: ", this.state.speaker !== 4);
+    console.log("[" + side + "] Condition 3: ", this.state.shortQueued === false);
+    return (
+      (this.state.side !== side) &&
+      (this.state.speaker !== 4) &&
+      (this.state.shortQueued === false));
+  }
+
+  die = () => {
+    this.setState(() => ({
+      timerHeader: messages.END_OF_EVENT
+    }));
   }
 
   render(){
@@ -213,12 +273,13 @@ export default class CounterScene extends React.Component {
       <div className="main-container">
         <div className="left-pane">
           <LeftPane
-            isLeft={this.state.isLeft}
-            currentUser={this.state.currentUser}
+            side={this.state.side}
+            speaker={this.state.speaker}
             hideCurrent={this.state.inShort}
             shortsAvailable={this.state.leftShorts}
             shortDuration={this.props.metadata.sduration}
             handleUseShort={this.handleUseLeftShort}
+            canUseShort={this.canUseShort}
           />
         </div>
         <div className="center-pane">
@@ -228,21 +289,22 @@ export default class CounterScene extends React.Component {
           </header>
           <hr className="center-pane--line"/>
           <div className="timer-container">
-            <h3 className="timer-container--header">{this.getTimerHeader()}</h3>
+            <h3 className="timer-container--header">{this.state.timerHeader}</h3>
             <div className="timer-container--timer-box">{this.getTimerState()}</div>
           </div>
         </div>
         <div className="right-pane">
           <RightPane
-            isLeft={this.state.isLeft}
-            currentUser={this.state.currentUser}
+            side={this.state.side}
+            speaker={this.state.speaker}
             hideCurrent={this.state.inShort}
             shortsAvailable={this.state.rightShorts}
             shortDuration={this.props.metadata.sduration}
             handleUseShort={this.handleUseRightShort}
+            canUseShort={this.canUseShort}
           />
         </div>
-        <button onClick={this.nextUser}>Next</button>
+        <button onClick={this.pushQueue}>Next</button>
         <button onClick={this.reset}>Reset</button>
         <button onClick={this.testCountdown}>Countdown</button>
         <button onClick={this.pauseTimer}>Stop</button>

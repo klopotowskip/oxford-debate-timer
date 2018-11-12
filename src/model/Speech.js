@@ -1,21 +1,21 @@
 
 export default class Speech {
 
-  constructor(type, speaker, side){
+  constructor(type, side, speaker){
     this.type = type;
+    this.side = side;
     if(speaker) this.speaker = speaker;
-    if(side) this.side = side;
   }
 
   getSide = () => {
-    return side;
+    return this.side;
   }
 
   getType = () => {
-    return type;
+    return this.type;
   }
 
   getSpeaker = () => {
-    return speaker;
+    return this.speaker;
   }
 }
