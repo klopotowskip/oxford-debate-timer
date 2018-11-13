@@ -8,7 +8,9 @@ import SpeechType from '~/src/model/SpeechType';
 
 import Speech from '~/src/model/Speech'
 
-import { counterMessages as messages } from '~/src/components/messages/pl-PL/counter-messages';
+import { getCounterMessages } from '~/src/locale/locale-supplier';
+
+const messages = getCounterMessages();
 
 const INIT_QUEUE = [
   // First speech is loaded on startup
@@ -252,10 +254,6 @@ export default class CounterScene extends React.Component {
   }
 
   canUseShort = (side) => {
-    console.log("SIDE: " + side)
-    console.log("[" + side + "] Condition 1: ", this.state.side !== side);
-    console.log("[" + side + "] Condition 2: ", this.state.speaker !== 4);
-    console.log("[" + side + "] Condition 3: ", this.state.shortQueued === false);
     return (
       (this.state.side !== side) &&
       (this.state.speaker !== 4) &&
@@ -284,7 +282,7 @@ export default class CounterScene extends React.Component {
         </div>
         <div className="center-pane">
           <header className="center-pane-header">
-            <h2 className="center-pane-header__text center-pane-header--topic">Topic: {this.props.metadata.topic}</h2>
+            <h2 className="center-pane-header__text center-pane-header--topic"> {messages.TOPIC + this.props.metadata.topic}</h2>
             <h3 className="center-pane-header__text center-pane-header--state">{this.printState()}</h3>
           </header>
           <hr className="center-pane--line"/>

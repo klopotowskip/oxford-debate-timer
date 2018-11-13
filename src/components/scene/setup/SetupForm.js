@@ -1,5 +1,11 @@
 import React from 'react';
 
+//import { setupMessages as messages } from '~/src/components/messages/pl/setup-messages';
+
+import { getSetupMessages } from '~/src/locale/locale-supplier';
+
+const messages = getSetupMessages(); 
+
 export default class SetupForm extends React.Component {
 
   processSetupSettings = (e) => {
@@ -17,13 +23,13 @@ export default class SetupForm extends React.Component {
     return (
       <div>
         <form className="setup-form" onSubmit={this.processSetupSettings}>
-          <span className="setup-form__input-name">Topic:</span>
+          <span className="setup-form__input-name">{messages.TOPIC}</span>
           <input autoFocus type="text" name="topic" className="setup-form__topic-input" required defaultValue="test"/>
           <div className="lduration-radio">
-            <span className="lduration-radio__title">lduration</span>
+            <span className="lduration-radio__title">{messages.LONG_SPEECH_DURATION}</span>
             <div>
               <input type="radio" id="lduration-debug" name="lduration" value="50" defaultChecked/>
-              <label htmlFor="lduration-debug">DEBUG</label>
+              <label htmlFor="lduration-debug">2 min</label>
             </div>
             <div>
               <input type="radio" id="lduration-3min" name="lduration" value="1800"/>
@@ -40,7 +46,7 @@ export default class SetupForm extends React.Component {
           </div>
 
           <div className="squantity-radio">
-            <span className="squantity-radio__title">squantity</span>
+            <span className="squantity-radio__title">{messages.SHORT_SPEECH_QUANTITY}</span>
             <div>
               <input type="radio" id="squantity-0" name="squantity" value="0"/>
               <label htmlFor="squantity-0">0</label>
@@ -55,7 +61,7 @@ export default class SetupForm extends React.Component {
             </div>
           </div>
           <div className="sduration-radio">
-            <span className="sduration-radio__title">sduration</span>
+            <span className="sduration-radio__title">{messages.SHORT_SPEECH_DURATION}</span>
             <div>
               <input type="radio" id="sduration-debug" name="sduration" value="30" defaultChecked/>
               <label htmlFor="sduration-3s">DEBUG</label>
@@ -73,7 +79,7 @@ export default class SetupForm extends React.Component {
               <label htmlFor="sduration-2min">2 min</label>
             </div>
 
-            <button type="submit" className="setup-form__submit">Start</button>
+            <button type="submit" className="setup-form__submit">{messages.START_BUTTON}</button>
           </div>
         </form>
       </div>
