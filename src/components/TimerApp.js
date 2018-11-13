@@ -26,7 +26,6 @@ export default class TimerApp extends React.Component {
   }
 
   render(){
-    console.log("Hello: " + this.state.scene);
     return (
       <div>
         {
