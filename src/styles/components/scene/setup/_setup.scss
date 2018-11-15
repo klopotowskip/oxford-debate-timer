@@ -1,23 +1,61 @@
+//Local variables
+$button-height: 40px;
+
+
+
 .setup-box {
   //Center container
   width: 700px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 150px;
+
+  background-color: $container-color;
+  padding: 10px;
 }
 
 .setup-form__radio-button {
   // Remove bullets from radio buttons
-  visibility: hidden;
+  display: none;
+}
+
+.setup-form {
+  text-align: center;
+}
+
+//For all the labels
+.setup-form__radio-option-box {
+  display: inline-block;
+  height: $button-height;
+  @include lateralBorders(2px solid $button-border-color);
+  margin-left: 10px;
 }
 
 
-//For all the labels
-.setup-form__radio-button + label {
+.setup-form__radio-button
+  + .setup-form__radio-button-label {
   cursor: pointer;
+  display: block; //Fit to button size
+  width: 50px;
+  height: $button-height;
+  line-height: $button-height;
+  text-align: center;
+  vertical-align: center;
 }
 
 //For checked labels
-.setup-form__radio-button:checked + label {
+.setup-form__radio-button:checked
+  + .setup-form__radio-button-label {
   color: red;
+}
+
+.setup-form__submit {
+  margin: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px;
+  height: 70px;
+  border: none;
+  background-color: $main-theme-color;
 }

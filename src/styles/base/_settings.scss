@@ -1,4 +1,34 @@
+//Mixins
+
+@mixin lateralBorders($style) {
+  border-left: $style;
+  border-right: $style;
+}
+
+@mixin noHighlight {
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@mixin placeholder {
+  ::-webkit-input-placeholder {@content}
+  :-moz-placeholder           {@content}
+  ::-moz-placeholder          {@content}
+  :-ms-input-placeholder      {@content}
+}
+
 //Colors
+$button-border-color: #333;
+
+
+$main-theme-color: #f1c40f;
+$button-border-color: #f1d70f;
+
+$container-color: rgba(255, 255, 255, 0.5);
 
 //Spacing
 $s-size: 1.2rem;
