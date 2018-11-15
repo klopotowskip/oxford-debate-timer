@@ -1,0 +1,23 @@
+.setup-box {
+  //Center container
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 150px;
+}
+
+.setup-form__radio-button {
+  // Remove bullets from radio buttons
+  visibility: hidden;
+}
+
+
+//For all the labels
+.setup-form__radio-button + label {
+  cursor: pointer;
+}
+
+//For checked labels
+.setup-form__radio-button:checked + label {
+  color: red;
+}
