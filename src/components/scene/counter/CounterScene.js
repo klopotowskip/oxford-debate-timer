@@ -126,11 +126,6 @@ export default class CounterScene extends React.Component {
     return text + "." + dseconds;
   }
 
-  //TESTING
-  testCountdown = () => {
-    this.startTimer(100);
-  }
-
   startTimer = (time) => {
     this.setState({
       paused: false,
@@ -302,10 +297,6 @@ export default class CounterScene extends React.Component {
             canUseShort={this.canUseShort}
           />
         </div>
-        <button onClick={this.pushQueue}>Next</button>
-        <button onClick={this.reset}>Reset</button>
-        <button onClick={this.testCountdown}>Countdown</button>
-        <button onClick={this.pauseTimer}>Stop</button>
       </div>
     );
   }

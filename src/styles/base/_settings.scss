@@ -14,6 +14,23 @@
   user-select: none;
 }
 
+@mixin autoLateralMargins(){
+  margin-left: auto;
+  margin-right: auto;
+}
+
+//Mixin from http://coderesponsible.com/useful-sass-mixins/
+@mixin linearGradient($top, $bottom){
+    background: $top; /* Old browsers */
+    background: -moz-linear-gradient(top,  $top 0%, $bottom 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$top), color-stop(100%,$bottom)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  $top 0%,$bottom 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  $top 0%,$bottom 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  $top 0%,$bottom 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  $top 0%,$bottom 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+
 @mixin placeholder {
   ::-webkit-input-placeholder {@content}
   :-moz-placeholder           {@content}
@@ -22,18 +39,24 @@
 }
 
 //Colors
+
 $button-border-color: #333;
 
 
 $main-theme-color: #f1c40f;
 $button-border-color: #f1d70f;
 
+$main-dark-color: #222;
+
+$main-inactivity-color: rgba(100, 100, 100, 0.4);
+
 $container-color: rgba(255, 255, 255, 0.5);
+
+$brigtness: 220;
+$counter-background-container-color: rgba($brigtness, $brigtness, $brigtness, 0.5);
 
 //Spacing
 $s-size: 1.2rem;
 $m-size: 1.6rem;
-$l-size: 3.2rem;
-$xl-size: 4.8rem;
-
-$desktop-breakpoint: 45rem;
+$l-size: 2.8rem;
+$xl-size: 3.2rem;

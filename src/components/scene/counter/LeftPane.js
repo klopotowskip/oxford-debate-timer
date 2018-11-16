@@ -6,6 +6,10 @@ import { faUser as userActive } from '@fortawesome/free-solid-svg-icons';
 
 import Side from '~/src/model/Side';
 
+import { getCounterMessages } from '~/src/locale/locale-supplier';
+
+const messages = getCounterMessages();
+
 export default class LeftPane extends React.Component {
 
   getShortButtonLabel = () => {
@@ -63,6 +67,7 @@ export default class LeftPane extends React.Component {
 
     return (
       <div>
+        <span className="team-name">{messages.LEFT_SIDE_LABEL}</span>
         <div>
           {users.map((user) => {
             return user;

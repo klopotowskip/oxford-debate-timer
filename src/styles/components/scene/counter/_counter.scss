@@ -1,0 +1,108 @@
+$lateral-containers-width: 200px;
+
+$inactive-icon-color: rgba(100, 100, 100, 0.4);
+$current-icon-color: $main-theme-color;
+$active-icon-color: $main-dark-color;
+
+$button-border-radius: 2px;
+
+$change-cursor-on-inactive-buttons: true;
+
+.main-container {
+  width: 70%;
+  margin-top: 100px;
+  @include autoLateralMargins();
+
+  //Grid parent properties
+  display: grid;
+  grid-template-columns: $lateral-containers-width auto $lateral-containers-width;
+  grid-column-gap: 10px;
+}
+
+.left-pane {
+  //Grid properties
+  grid-column-start: 1;
+  grid-column-end: 1;
+
+  background-color: $counter-background-container-color;
+
+  text-align: center;
+
+  padding: 10px;
+}
+
+.center-pane {
+  //Grid properties
+  grid-column-start: 2;
+  grid-column-end: 2;
+
+  background-color: $counter-background-container-color;
+}
+
+.right-pane {
+  //Grid properties
+  grid-column-start: 3;
+  grid-column-end: 3;
+
+  background-color: $counter-background-container-color;
+
+  text-align: center;
+
+  padding: 10px;
+}
+
+
+.user-icon {
+  //width: 100px;
+  //height: 100px;
+  padding: 10px;
+  font-size: 60px;
+  display: block;
+  @include autoLateralMargins();
+}
+
+.team-name {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: $xl-size;
+}
+
+
+//User icons modifiers
+.user-icon--inactive{
+  color: $inactive-icon-color;
+}
+.user-icon--current{
+  color: $current-icon-color;
+}
+
+.user-icon--active{
+  color: $active-icon-color;
+}
+
+.short-button {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+
+  line-height: 44px;
+  font-size: 22px;
+  font-weight: 700;
+
+  background-color: transparent;
+  color: $main-dark-color;
+  border: $button-border-radius solid $main-dark-color;
+}
+
+.short-button:enabled:hover {
+  @include linearGradient(lighten($main-theme-color, 30%), $main-theme-color);
+  border: $button-border-radius solid $main-theme-color;
+}
+
+.short-button:disabled {
+  color: $main-inactivity-color;
+  border: $button-border-radius solid $main-inactivity-color;
+  @if $change-cursor-on-inactive-buttons {
+    cursor: no-drop;
+  }
+}
