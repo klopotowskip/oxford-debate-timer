@@ -1,12 +1,13 @@
-$lateral-containers-width: 200px;
+@import './lateral-containers';
 
-$inactive-icon-color: rgba(100, 100, 100, 0.4);
-$current-icon-color: $main-theme-color;
-$active-icon-color: $main-dark-color;
 
-$button-border-radius: 2px;
+$horizontal-line-color: $main-inactivity-color;
 
-$change-cursor-on-inactive-buttons: true;
+$max-logo-width: 70%;
+
+$timer-font-size: 150px;
+
+
 
 .main-container {
   width: 70%;
@@ -19,17 +20,7 @@ $change-cursor-on-inactive-buttons: true;
   grid-column-gap: 10px;
 }
 
-.left-pane {
-  //Grid properties
-  grid-column-start: 1;
-  grid-column-end: 1;
 
-  background-color: $counter-background-container-color;
-
-  text-align: center;
-
-  padding: 10px;
-}
 
 .center-pane {
   //Grid properties
@@ -37,72 +28,59 @@ $change-cursor-on-inactive-buttons: true;
   grid-column-end: 2;
 
   background-color: $counter-background-container-color;
+
+  //Flexbox for element child, that should be algined vertically
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.right-pane {
-  //Grid properties
-  grid-column-start: 3;
-  grid-column-end: 3;
 
-  background-color: $counter-background-container-color;
 
+
+
+.center-pane-content{
+  padding: 10px;
   text-align: center;
-
-  padding: 10px;
 }
 
+.center-pane__logo {
+  max-width: $max-logo-width;
 
-.user-icon {
-  //width: 100px;
-  //height: 100px;
-  padding: 10px;
-  font-size: 60px;
-  display: block;
-  @include autoLateralMargins();
 }
 
-.team-name {
+.center-pane-header__text {
+  margin: 0; //Reset collapsed margins
+  margin-bottom: 10px;
+}
+
+.center-pane-header--topic {
+  text-transform: capitalize;
+  font-weight: 400;
+}
+
+.center-pane-header--state {
   text-transform: uppercase;
-  font-weight: 700;
-  font-size: $xl-size;
 }
 
 
-//User icons modifiers
-.user-icon--inactive{
-  color: $inactive-icon-color;
-}
-.user-icon--current{
-  color: $current-icon-color;
+
+.timer-container__header {
+  text-transform: capitalize;
 }
 
-.user-icon--active{
-  color: $active-icon-color;
+.timer-container__timer-box {
+  font-size: $timer-font-size;
 }
 
-.short-button {
-  width: 50px;
-  height: 50px;
+.timer-container__timer-box:nth-letter(6) {
+  font-size: 0.5em;
+  color: red;
+}
+
+.center-pane__line {
   margin: 10px;
-
-  line-height: 44px;
-  font-size: 22px;
-  font-weight: 700;
-
-  background-color: transparent;
-  color: $main-dark-color;
-  border: $button-border-radius solid $main-dark-color;
-}
-
-.short-button:enabled:hover {
-  @include linearGradient(lighten($main-theme-color, 30%), $main-theme-color);
-  border: $button-border-radius solid $main-theme-color;
-}
-
-.short-button:disabled {
-  color: $main-inactivity-color;
-  border: $button-border-radius solid $main-inactivity-color;
-  @if $change-cursor-on-inactive-buttons {
-    cursor: no-drop;
-  }
+  height: 2px;
+  border: 0;
+  background-color: $horizontal-line-color;
 }

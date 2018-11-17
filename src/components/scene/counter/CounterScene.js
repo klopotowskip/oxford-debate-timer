@@ -264,39 +264,39 @@ export default class CounterScene extends React.Component {
   render(){
     return (
       <div className="main-container">
-        <div className="left-pane">
-          <LeftPane
-            side={this.state.side}
-            speaker={this.state.speaker}
-            hideCurrent={this.state.inShort}
-            shortsAvailable={this.state.leftShorts}
-            shortDuration={this.props.metadata.sduration}
-            handleUseShort={this.handleUseLeftShort}
-            canUseShort={this.canUseShort}
-          />
-        </div>
+        <LeftPane
+          side={this.state.side}
+          speaker={this.state.speaker}
+          hideCurrent={this.state.inShort}
+          shortsAvailable={this.state.leftShorts}
+          shortDuration={this.props.metadata.sduration}
+          handleUseShort={this.handleUseLeftShort}
+          canUseShort={this.canUseShort}
+        />
         <div className="center-pane">
-          <header className="center-pane-header">
-            <h2 className="center-pane-header__text center-pane-header--topic"> {messages.TOPIC + this.props.metadata.topic}</h2>
-            <h3 className="center-pane-header__text center-pane-header--state">{this.printState()}</h3>
-          </header>
-          <hr className="center-pane--line"/>
-          <div className="timer-container">
-            <h3 className="timer-container--header">{this.state.timerHeader}</h3>
-            <div className="timer-container--timer-box">{this.getTimerState()}</div>
+          <div className="center-pane-content">
+            <header className="center-pane-header">
+              <img src="/images/logo.png" className="center-pane__logo"/>
+              <h2 className="center-pane-header__text center-pane-header--topic"> {messages.TOPIC + this.props.metadata.topic}</h2>
+              <h3 className="center-pane-header__text center-pane-header--state">{this.printState()}</h3>
+            </header>
+            <hr className="center-pane__line"/>
+            <div className="timer-container">
+              <h3 className="timer-container__header">{this.state.timerHeader}</h3>
+              <div className="timer-container__timer-box">{this.getTimerState()}</div>
+            </div>
           </div>
         </div>
-        <div className="right-pane">
-          <RightPane
-            side={this.state.side}
-            speaker={this.state.speaker}
-            hideCurrent={this.state.inShort}
-            shortsAvailable={this.state.rightShorts}
-            shortDuration={this.props.metadata.sduration}
-            handleUseShort={this.handleUseRightShort}
-            canUseShort={this.canUseShort}
-          />
-        </div>
+
+        <RightPane
+          side={this.state.side}
+          speaker={this.state.speaker}
+          hideCurrent={this.state.inShort}
+          shortsAvailable={this.state.rightShorts}
+          shortDuration={this.props.metadata.sduration}
+          handleUseShort={this.handleUseRightShort}
+          canUseShort={this.canUseShort}
+        />
       </div>
     );
   }

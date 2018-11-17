@@ -66,14 +66,14 @@ export default class LeftPane extends React.Component {
     }
 
     return (
-      <div>
-        <span className="team-name">{messages.LEFT_SIDE_LABEL}</span>
-        <div>
+      <div className="left-pane">
+        <div className="team-name">{messages.LEFT_SIDE_LABEL}</div>
+        <div className="user-icons-box">
           {users.map((user) => {
             return user;
           })}
         </div>
-        <div>
+        <div className="short-buttons-box">
           {shorts.map((shortButton) => {
             return shortButton;
           })}
