@@ -100,15 +100,16 @@ export default class CounterScene extends React.Component {
 
   printState = () => {
     if(this.state.hasEnded) return "";
+    const inShort = this.state.inShort;
     let side;
     switch(this.state.side){
       case Side.LEFT:
-        side = messages.LEFT_SIDE_LABEL;
+        side = inShort ? messages.LEFT_SIDE_LABEL : messages.LEFT_SIDE_DISPLAYED_NAME;
         break;
       case Side.RIGHT:
-        side = messages.RIGHT_SIDE_LABEL;
+        side = inShort ? messages.RIGHT_SIDE_LABEL : messages.RIGHT_SIDE_DISPLAYED_NAME;
     }
-    if(this.state.inShort) return side + " – " + messages.SHORT_SPEECH_LABEL;
+    if(inShort) return side + " – " + messages.SHORT_SPEECH_LABEL;
     else return this.state.speaker + " " + side;
   }
 
