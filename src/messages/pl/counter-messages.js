@@ -6,7 +6,7 @@ const counterMessages = {
   TIME_LEFT: `pozostało czasu`,
   TIME_UP: `koniec czasu`,
   TIMER_PAUSED: `czas zatrzymano`,
-  TOPIC: `teza: `
+  TOPIC: `Teza: `
 };
 
 export { counterMessages };

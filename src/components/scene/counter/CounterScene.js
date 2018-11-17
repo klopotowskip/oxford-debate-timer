@@ -114,17 +114,22 @@ export default class CounterScene extends React.Component {
     const seconds = (time-(time%10))/10;
     time -= seconds * 10;
 
-    const dseconds = time;
+    let dseconds = time;
 
     let text = "" + minutes + ":";
 
     if(seconds<10) text = text + "0" + seconds;
     else text = text + seconds;
 
-    if(dseconds < 0) return text + ".0";
+    if(dseconds < 0) dseconds = 0
 
-    return text + "." + dseconds;
+    return (
+      <div>
+        {text}<span className="timer-container__dseconds-span">{"." + dseconds}</span>
+      </div>
+    );
   }
+
 
   startTimer = (time) => {
     this.setState({

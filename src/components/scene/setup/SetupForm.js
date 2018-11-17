@@ -55,6 +55,10 @@ export default class SetupForm extends React.Component {
               <input className="setup-form__radio-button" type="radio" id="squantity-2" name="squantity" value="2" defaultChecked />
               <label className="setup-form__radio-button-label" htmlFor="squantity-2">2</label>
             </div>
+            <div className="setup-form__radio-option-box">
+              <input className="setup-form__radio-button" type="radio" id="squantity-3" name="squantity" value="3" />
+              <label className="setup-form__radio-button-label" htmlFor="squantity-3">3</label>
+            </div>
           </div>
           <div className="sduration-radio">
             <span className="setup-form__radio-title">{messages.SHORT_SPEECH_DURATION}</span>

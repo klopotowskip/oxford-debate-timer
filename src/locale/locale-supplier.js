@@ -1,7 +1,7 @@
 import { setupMessages as setupMessagesPL }
-  from '~/src/components/messages/pl/setup-messages';
+  from '~/src/messages/pl/setup-messages';
 import { counterMessages as counterMessagesPL }
-  from '~/src/components/messages/pl/counter-messages';
+  from '~/src/messages/pl/counter-messages';
 
 
 const getLocale = () => {

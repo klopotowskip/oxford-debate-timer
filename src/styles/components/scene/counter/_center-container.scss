@@ -1,0 +1,62 @@
+$horizontal-line-color: $main-inactivity-color;
+
+$max-logo-width: 70%;
+
+$timer-font-size: 15rem;
+$dseconds-span-font-size: 0.65em;
+
+.center-pane {
+  //Grid properties
+  grid-column-start: 2;
+  grid-column-end: 2;
+
+  background-color: $counter-background-container-color;
+
+  //Flexbox for element child, that should be algined vertically
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.center-pane-content{
+  padding: 10px;
+  text-align: center;
+}
+
+.center-pane__logo {
+  max-width: $max-logo-width;
+
+}
+
+.center-pane-header__text {
+  margin: 0; //Reset collapsed margins
+  margin-bottom: 10px;
+}
+
+.center-pane-header--topic {
+  font-weight: 400;
+}
+
+.center-pane-header--state {
+  text-transform: uppercase;
+  font-size: $l-size;
+}
+
+.timer-container__header {
+  text-transform: uppercase;
+}
+
+.timer-container__timer-box {
+  font-size: $timer-font-size;
+}
+
+.timer-container__dseconds-span {
+  font-size: $dseconds-span-font-size;
+}
+
+.center-pane__line {
+  margin: 10px;
+  height: 2px;
+  border: 0;
+  background-color: $horizontal-line-color;
+}
