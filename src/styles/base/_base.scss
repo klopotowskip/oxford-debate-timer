@@ -1,4 +1,4 @@
-
+$global-font-color: #111;
 
 html{
   font-size: 62.5%;
@@ -8,6 +8,8 @@ body {
 
   font-family: Helvetica, Arial, sans-serif;
   font-size: $m-size;
+
+  color: $global-font-color;
 
   /* Background pattern from Toptal Subtle Patterns */
   background: url('/images/qbkls.png');

@@ -282,7 +282,7 @@ export default class CounterScene extends React.Component {
           <div className="center-pane-content">
             <header className="center-pane-header">
               <img src="/images/logo.png" className="center-pane__logo"/>
-              <h2 className="center-pane-header__text center-pane-header--topic"> {messages.TOPIC + this.props.metadata.topic}</h2>
+              <h2 className="center-pane-header__text center-pane-header--topic"> {this.props.metadata.topic ? messages.TOPIC + this.props.metadata.topic : ""} </h2>
               <h3 className="center-pane-header__text center-pane-header--state">{this.printState()}</h3>
             </header>
             <hr className="center-pane__line"/>

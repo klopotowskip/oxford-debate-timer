@@ -1,7 +1,12 @@
 //Local variables
 $button-height: 40px;
 
+$max-logo-width: 50%;
 
+$input-bottom-border: 2px solid $main-inactivity-color;
+$input-bottom-border-focused: 2px solid $main-theme-color;
+
+$radio-title-color: #555;
 
 .setup-box {
   //Center container
@@ -13,6 +18,35 @@ $button-height: 40px;
   background-color: $container-color;
   padding: 10px;
 }
+
+.setup-form-logo {
+  max-width: $max-logo-width;
+  display: block;
+  @include autoLateralMargins();
+}
+
+.setup-form__topic-input {
+  background-color: transparent;
+  border: none;
+  border-bottom: $input-bottom-border;
+}
+
+.setup-form__topic-input:focus {
+  border-bottom: $input-bottom-border-focused;
+}
+
+.setup-form__radio-title {
+  font-size: $s-size;
+  text-transform: uppercase;
+  color: $radio-title-color;
+  margin-right: 10px;
+}
+
+.setup-form__radio-group {
+  margin-top: 10px;
+}
+
+
 
 .setup-form__radio-button {
   // Remove bullets from radio buttons
@@ -26,11 +60,14 @@ $button-height: 40px;
 //For all the labels
 .setup-form__radio-option-box {
   display: inline-block;
+  width: 50px;
   height: $button-height;
-  @include lateralBorders(2px solid $button-border-color);
-  margin-left: 10px;
+  border-left: 2px solid $button-border-color;
 }
 
+.setup-form__radio-option-box:last-child{
+  border-right: 2px solid $button-border-color;
+}
 
 .setup-form__radio-button
   + .setup-form__radio-button-label {
