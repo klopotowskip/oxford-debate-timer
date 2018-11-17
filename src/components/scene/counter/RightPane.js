@@ -30,6 +30,7 @@ export default class RightPane extends React.Component {
     let speaker = this.props.speaker;
     let side = this.props.side;
     let hideCurrent = this.props.hideCurrent;
+    let hasEnded = this.props.hasEnded;
 
     for(let i = 1; i <= 4; i++){
       let id = "user-right-" + i;
@@ -38,8 +39,10 @@ export default class RightPane extends React.Component {
       } else if(i<speaker){
         users.push(<FontAwesomeIcon key={id} id={id} icon={userInactive} className="user-icon user-icon--inactive" />);
       } else {
-        if((side === Side.RIGHT) && (!hideCurrent)){
+        if((side === Side.RIGHT) && (!hideCurrent) && (!hasEnded)){
           users.push(<FontAwesomeIcon key={id} id={id} icon={userActive} className="user-icon user-icon--current" />);
+        } else if (hasEnded){
+          users.push(<FontAwesomeIcon key={id} id={id} icon={userInactive} className="user-icon user-icon--inactive" />);
         } else {
           users.push(<FontAwesomeIcon key={id} id={id} icon={userActive} className="user-icon user-icon--active" />);
         }

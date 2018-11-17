@@ -31,13 +31,6 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
 
-@mixin placeholder {
-  ::-webkit-input-placeholder {@content}
-  :-moz-placeholder           {@content}
-  ::-moz-placeholder          {@content}
-  :-ms-input-placeholder      {@content}
-}
-
 //Colors
 
 $button-border-color: #333;
@@ -58,5 +51,5 @@ $counter-background-container-color: rgba($brigtness, $brigtness, $brigtness, 0.
 //Spacing
 $s-size: 1.2rem;
 $m-size: 1.6rem;
-$l-size: 2.8rem;
+$l-size: 2.2rem;
 $xl-size: 3.2rem;

@@ -2,6 +2,11 @@
 @import './center-container';
 
 
+$reset-button-font-size: 5rem;
+$reset-button-color: scale-color($main-inactivity-color, $alpha: -20%);
+$reset-button-hover-color: $main-dark-color;
+
+
 .main-container {
   width: 70%;
   margin-top: 100px;
@@ -11,4 +16,18 @@
   display: grid;
   grid-template-columns: $lateral-containers-width auto $lateral-containers-width;
   grid-column-gap: 10px;
+}
+
+.resetButton {
+  border: none;
+  background-color: transparent;
+  font-size: $reset-button-font-size;
+  color: $reset-button-color;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.resetButton:hover {
+  color: $reset-button-hover-color;
 }

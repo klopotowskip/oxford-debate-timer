@@ -12,6 +12,12 @@ export default class TimerApp extends React.Component {
     scene: SCENE_SETUP
   }
 
+  resetApp = () => {
+    this.setState(() => ({
+      scene: SCENE_SETUP
+    }));
+  }
+
   processSetupSettings = (topic, lduration, squantity, sduration) => {
     const metadata = {
       topic,
@@ -41,6 +47,7 @@ export default class TimerApp extends React.Component {
                 return (
                   <CounterScene
                     metadata={this.state.metadata}
+                    resetApp={this.resetApp}
                   />
                 );
               default:

@@ -10,6 +10,9 @@ import Speech from '~/src/model/Speech'
 
 import { getCounterMessages } from '~/src/locale/locale-supplier';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUndoAlt as undo } from '@fortawesome/free-solid-svg-icons';
+
 const messages = getCounterMessages();
 
 const INIT_QUEUE = [
@@ -60,6 +63,8 @@ export default class CounterScene extends React.Component {
     //Time left for current speech (defined in 1/10 seconds)
     time: parseInt(this.props.metadata.lduration),
 
+    //Defines if event has reached it's end
+    hasEnded: false
   }
 
   timeout = undefined;
@@ -94,6 +99,7 @@ export default class CounterScene extends React.Component {
   }
 
   printState = () => {
+    if(this.state.hasEnded) return "";
     let side;
     switch(this.state.side){
       case Side.LEFT:
@@ -262,46 +268,53 @@ export default class CounterScene extends React.Component {
 
   die = () => {
     this.setState(() => ({
-      timerHeader: messages.END_OF_EVENT
+      timerHeader: messages.END_OF_EVENT,
+      hasEnded: 5 //When event ends, we don't want any of the icons to be highlighted
     }));
   }
 
   render(){
     return (
-      <div className="main-container">
-        <LeftPane
-          side={this.state.side}
-          speaker={this.state.speaker}
-          hideCurrent={this.state.inShort}
-          shortsAvailable={this.state.leftShorts}
-          shortDuration={this.props.metadata.sduration}
-          handleUseShort={this.handleUseLeftShort}
-          canUseShort={this.canUseShort}
-        />
-        <div className="center-pane">
-          <div className="center-pane-content">
-            <header className="center-pane-header">
-              <img src="/images/logo.png" className="center-pane__logo"/>
-              <h2 className="center-pane-header__text center-pane-header--topic"> {this.props.metadata.topic ? messages.TOPIC + this.props.metadata.topic : ""} </h2>
-              <h3 className="center-pane-header__text center-pane-header--state">{this.printState()}</h3>
-            </header>
-            <hr className="center-pane__line"/>
-            <div className="timer-container">
-              <h3 className="timer-container__header">{this.state.timerHeader}</h3>
-              <div className="timer-container__timer-box">{this.getTimerState()}</div>
+      <div>
+        <div className="main-container">
+          <LeftPane
+            side={this.state.side}
+            speaker={this.state.speaker}
+            hideCurrent={this.state.inShort}
+            shortsAvailable={this.state.leftShorts}
+            shortDuration={this.props.metadata.sduration}
+            handleUseShort={this.handleUseLeftShort}
+            canUseShort={this.canUseShort}
+          />
+          <div className="center-pane">
+            <div className="center-pane-content">
+              <header className="center-pane-header">
+                <img src="/images/logo.png" className="center-pane__logo"/>
+                <h2 className="center-pane-header__text center-pane-header--topic"> {this.props.metadata.topic ? messages.TOPIC + this.props.metadata.topic : ""} </h2>
+                <h3 className="center-pane-header__text center-pane-header--state">{this.printState()}</h3>
+              </header>
+              <hr className="center-pane__line"/>
+              <div className="timer-container">
+                <h3 className="timer-container__header">{this.state.timerHeader}</h3>
+                <div className="timer-container__timer-box">{this.getTimerState()}</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <RightPane
-          side={this.state.side}
-          speaker={this.state.speaker}
-          hideCurrent={this.state.inShort}
-          shortsAvailable={this.state.rightShorts}
-          shortDuration={this.props.metadata.sduration}
-          handleUseShort={this.handleUseRightShort}
-          canUseShort={this.canUseShort}
-        />
+          <RightPane
+            side={this.state.side}
+            speaker={this.state.speaker}
+            hideCurrent={this.state.inShort}
+            shortsAvailable={this.state.rightShorts}
+            shortDuration={this.props.metadata.sduration}
+            handleUseShort={this.handleUseRightShort}
+            canUseShort={this.canUseShort}
+            hasEnded={this.state.hasEnded}
+          />
+        </div>
+        <button className="resetButton" onClick={this.props.resetApp}>
+          <FontAwesomeIcon icon={undo} />
+        </button>
       </div>
     );
   }
