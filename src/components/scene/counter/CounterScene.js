@@ -74,10 +74,16 @@ export default class CounterScene extends React.Component {
       document.addEventListener('keyup', this.onKeyUp);
     }, 200);
 
+    //Prevent user from leaving page accidentally
+    window.onbeforeunload = function() {
+      return messages.FAREWELL;
+    }
+
   }
 
   componentWillUnmount(){
     document.removeEventListener('keyup', this.onKeyUp);
+    window.onbeforeunload = undefined;
   }
 
   onKeyUp = (e) => {
@@ -267,7 +273,11 @@ export default class CounterScene extends React.Component {
       (this.state.shortQueued === false));
   }
 
+  /**
+   * End the debate
+   */
   die = () => {
+    window.onbeforeunload = undefined;
     this.setState(() => ({
       timerHeader: messages.END_OF_EVENT,
       hasEnded: 5 //When event ends, we don't want any of the icons to be highlighted
