@@ -31,3 +31,7 @@ $reset-button-hover-color: $main-dark-color;
 .resetButton:hover {
   color: $reset-button-hover-color;
 }
+
+.audio-file{
+  visibility: hidden;
+}

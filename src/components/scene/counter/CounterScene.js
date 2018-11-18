@@ -8,6 +8,8 @@ import SpeechType from '~/src/model/SpeechType';
 
 import Speech from '~/src/model/Speech'
 
+import Sound from 'react-sound'
+
 import { getCounterMessages } from '~/src/locale/locale-supplier';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -50,6 +52,8 @@ export default class CounterScene extends React.Component {
 
     //Defines whether times is paused RIGHT NOW
     paused: true,
+
+    playShortSound: false,
 
     //Speeches queue
     queue: INIT_QUEUE,
@@ -154,6 +158,16 @@ export default class CounterScene extends React.Component {
   }
 
   countdown = () => {
+    if(this.state.time == 2105){
+      this.setState(() => ({
+        playShortSound: true
+      }));
+    }
+    else if(this.state.time == 2097){
+      this.setState(() => ({
+        playShortSound: false
+      }));
+    }
     this.setState((prevState) => ({ time: prevState.time - 1 }));
     if(this.state.time > 0 && (!this.state.paused)){
       this.timeout = window.setTimeout(this.countdown, 100);
@@ -287,6 +301,12 @@ export default class CounterScene extends React.Component {
   render(){
     return (
       <div>
+        {this.state.playShortSound ?
+          <Sound
+            url="audio/hit.mp3"
+            playStatus={Sound.status.PLAYING}
+          />
+        : ""}
         <div className="main-container">
           <LeftPane
             side={this.state.side}
