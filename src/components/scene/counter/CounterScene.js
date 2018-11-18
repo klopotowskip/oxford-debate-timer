@@ -8,8 +8,6 @@ import SpeechType from '~/src/model/SpeechType';
 
 import Speech from '~/src/model/Speech'
 
-import Sound from 'react-sound'
-
 import { getCounterMessages } from '~/src/locale/locale-supplier';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,7 +32,6 @@ const INIT_QUEUE = [
 export default class CounterScene extends React.Component {
 
   state = {
-
     //Current speaker number (integers from 1 to 4)
     speaker: 1,
     //Current speaker team
@@ -53,7 +50,7 @@ export default class CounterScene extends React.Component {
     //Defines whether times is paused RIGHT NOW
     paused: true,
 
-    playShortSound: false,
+    playWarningSound: false,
 
     //Speeches queue
     queue: INIT_QUEUE,
@@ -68,10 +65,43 @@ export default class CounterScene extends React.Component {
     time: parseInt(this.props.metadata.lduration),
 
     //Defines if event has reached it's end
-    hasEnded: false
+    hasEnded: false,
+
+    //Defines whether sounds are enabled
+    soundsEnabled: (localStorage.getItem('soundsEnabled') ?
+      (localStorage.getItem('soundsEnabled') ? true: false)
+      : true)
   }
 
   timeout = undefined;
+
+  startingTimesShort = []; //Array stores timestamps in which warning sounds are starting (for short speeches)
+  startingTimesLong = []; //Array stores timestamps in which warning sounds are starting (for long speeches)
+
+  endingTimesShort = []; //Array stores timestamps in which warning sounds are ending (for short speeches)
+  endingTimesLong = []; //Array stores timestamps in which warning sounds are ending (for long speeches)
+
+  defineAlarmsTimes = () => {
+    const sduration = this.props.metadata.sduration;
+    const lduration = this.props.metadata.lduration;
+    const upperMargin = 4;
+    const lowerMargin = 4;
+
+    if(sduration == 300){
+      this.startingTimesShort.push(150 + upperMargin);
+      this.endingTimesShort.push(150 - lowerMargin);
+    } else {
+      this.startingTimesShort.push(sduration - 300 + upperMargin);
+      this.endingTimesShort.push(sduration - 300 - lowerMargin);
+    }
+
+    this.startingTimesLong.push(lduration - 300 + upperMargin);
+    this.endingTimesLong.push(lduration - 300 - lowerMargin);
+
+    this.startingTimesLong.push(300 + upperMargin);
+    this.endingTimesLong.push(300 - lowerMargin);
+
+  }
 
   componentDidMount(){
     window.setTimeout(() => {
@@ -83,6 +113,9 @@ export default class CounterScene extends React.Component {
       return messages.FAREWELL;
     }
 
+    this.defineAlarmsTimes();
+
+    localStorage.setItem('soundsEnabled', this.state.soundsEnabled);
   }
 
   componentWillUnmount(){
@@ -158,16 +191,41 @@ export default class CounterScene extends React.Component {
   }
 
   countdown = () => {
-    if(this.state.time == 2105){
-      this.setState(() => ({
-        playShortSound: true
-      }));
+    const time = parseInt(this.state.time);
+
+    if(this.state.soundsEnabled){
+      //Sound playing block
+      if(this.state.inShort){
+        if(this.startingTimesShort.includes(time)){
+          this.setState(() => ({
+            playWarningSound: true
+          }));
+        }
+
+        //Sound pausing block
+        if(this.endingTimesShort.includes(time)){
+          this.setState(() => ({
+            playWarningSound: false
+          }));
+        }
+      } else {
+        if(this.startingTimesLong.includes(time)){
+          this.setState(() => ({
+            playWarningSound: true
+          }));
+        }
+
+        //Sound pausing block
+        if(this.endingTimesLong.includes(time)){
+          this.setState(() => ({
+            playWarningSound: false
+          }));
+        }
+      }
+
     }
-    else if(this.state.time == 2097){
-      this.setState(() => ({
-        playShortSound: false
-      }));
-    }
+
+
     this.setState((prevState) => ({ time: prevState.time - 1 }));
     if(this.state.time > 0 && (!this.state.paused)){
       this.timeout = window.setTimeout(this.countdown, 100);
@@ -300,12 +358,10 @@ export default class CounterScene extends React.Component {
 
   render(){
     return (
+
       <div>
-        {this.state.playShortSound ?
-          <Sound
-            url="audio/hit.mp3"
-            playStatus={Sound.status.PLAYING}
-          />
+        {this.state.playWarningSound ?
+          <audio src="audio/hit.ogg" loop autoPlay></audio>
         : ""}
         <div className="main-container">
           <LeftPane
