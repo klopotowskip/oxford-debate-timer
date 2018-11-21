@@ -11,7 +11,11 @@ import Speech from '~/src/model/Speech'
 import { getCounterMessages } from '~/src/locale/locale-supplier';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUndoAlt as undo } from '@fortawesome/free-solid-svg-icons';
+import { faUndoAlt as undo, faVolumeUp as soundsOn, faVolumeOff as soundsOff } from '@fortawesome/free-solid-svg-icons';
+
+
+//Defines the time since which timer will be displayed in red
+const RED_TEXT_TIMER = 100;
 
 const messages = getCounterMessages();
 
@@ -28,6 +32,10 @@ const INIT_QUEUE = [
   new Speech(SpeechType.LONG, Side.LEFT, 4),
   new Speech(SpeechType.LONG, Side.RIGHT, 4),
 ];
+
+const parseBool = (bool) => {
+  return (bool == 'true') ? true: false;
+}
 
 export default class CounterScene extends React.Component {
 
@@ -52,6 +60,8 @@ export default class CounterScene extends React.Component {
 
     playWarningSound: false,
 
+    playEndSound: false,
+
     //Speeches queue
     queue: INIT_QUEUE,
 
@@ -68,9 +78,7 @@ export default class CounterScene extends React.Component {
     hasEnded: false,
 
     //Defines whether sounds are enabled
-    soundsEnabled: (localStorage.getItem('soundsEnabled') ?
-      (localStorage.getItem('soundsEnabled') ? true: false)
-      : true)
+    soundsEnabled: parseBool(localStorage.getItem('soundsEnabled'))
   }
 
   timeout = undefined;
@@ -123,7 +131,17 @@ export default class CounterScene extends React.Component {
     window.onbeforeunload = undefined;
   }
 
+
+  /**
+    *  Function controlling all the keyboard events in this scene and in this app
+    *
+  */
   onKeyUp = (e) => {
+    if(this.state.playEndSound) {
+      this.setState(() => ({
+        playEndSound: false
+      }));
+    }
     if(e.key === " "){
       if(this.state.paused) this.resumeTimer();
       else this.pauseTimer(false);
@@ -138,7 +156,7 @@ export default class CounterScene extends React.Component {
       speaker: 1,
       side: Side.LEFT,
       queue: INIT_QUEUE
-    }))
+    }));
   }
 
   printState = () => {
@@ -173,13 +191,13 @@ export default class CounterScene extends React.Component {
 
     if(dseconds < 0) dseconds = 0
 
+    let cssClass = this.state.time <= RED_TEXT_TIMER? ' timer-container__content--red': '';
     return (
-      <div>
+      <div className={"timer-container__content" + cssClass}>
         {text}<span className="timer-container__dseconds-span">{"." + dseconds}</span>
       </div>
     );
   }
-
 
   startTimer = (time) => {
     this.setState({
@@ -241,7 +259,11 @@ export default class CounterScene extends React.Component {
    */
   pauseTimer = (endOfTime) => {
     const timerHeader = endOfTime ? messages.TIME_UP : messages.TIMER_PAUSED;
-    this.setState({ paused: true, timerHeader: timerHeader }, () => {
+    this.setState({
+      paused: true,
+      timerHeader: timerHeader,
+      playEndSound: (this.state.soundsEnabled && endOfTime)
+    }, () => {
       window.clearTimeout(this.timeout);
     });
   }
@@ -290,6 +312,7 @@ export default class CounterScene extends React.Component {
       inShort: false,
       queue,
       shortQueued : false,
+      playEndSound: false,
       side,
       speaker,
       time: this.props.metadata.lduration,
@@ -303,7 +326,8 @@ export default class CounterScene extends React.Component {
       hasStarted: false,
       inShort: true,
       queue,
-      shortQueued : false,
+      shortQueued: false,
+      playEndSound: false,
       time: this.props.metadata.sduration,
       timerHeader: messages.TIME_LEFT
     }));
@@ -352,14 +376,25 @@ export default class CounterScene extends React.Component {
     window.onbeforeunload = undefined;
     this.setState(() => ({
       timerHeader: messages.END_OF_EVENT,
+      playEndSound: false,
       hasEnded: 5 //When event ends, we don't want any of the icons to be highlighted
     }));
+  }
+
+  switchSound = () => {
+    this.setState((prevState) => ({
+      soundsEnabled: !prevState.soundsEnabled
+    }), () => { localStorage.setItem('soundsEnabled', this.state.soundsEnabled); });
+
   }
 
   render(){
     return (
 
       <div>
+        {this.state.playEndSound ?
+          <audio src="audio/end.ogg" loop autoPlay></audio>
+        : ""}
         {this.state.playWarningSound ?
           <audio src="audio/hit.ogg" loop autoPlay></audio>
         : ""}
@@ -399,9 +434,19 @@ export default class CounterScene extends React.Component {
             hasEnded={this.state.hasEnded}
           />
         </div>
-        <button className="resetButton" onClick={this.props.resetApp}>
+        <div className="control-buttons-container">
+        <button className="control-buttons-container__control-button control-buttons-container__reset-button" onClick={this.props.resetApp}>
           <FontAwesomeIcon icon={undo} />
         </button>
+        <button className="control-buttons-container__control-button control-buttons-container__sound-button" onClick={this.switchSound}>
+          {this.state.soundsEnabled ?
+            <FontAwesomeIcon icon={soundsOn} />:
+            <FontAwesomeIcon icon={soundsOff} />
+          }
+
+        </button>
+        </div>
+
       </div>
     );
   }

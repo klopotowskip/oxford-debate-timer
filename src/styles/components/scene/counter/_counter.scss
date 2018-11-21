@@ -2,9 +2,9 @@
 @import './center-container';
 
 
-$reset-button-font-size: 5rem;
-$reset-button-color: scale-color($main-inactivity-color, $alpha: -20%);
-$reset-button-hover-color: $main-dark-color;
+$control-button-font-size: 5rem;
+$control-button-color: scale-color($main-inactivity-color, $alpha: -20%);
+$control-button-hover-color: $main-dark-color;
 
 
 .main-container {
@@ -18,18 +18,21 @@ $reset-button-hover-color: $main-dark-color;
   grid-column-gap: 10px;
 }
 
-.resetButton {
-  border: none;
-  background-color: transparent;
-  font-size: $reset-button-font-size;
-  color: $reset-button-color;
+.control-buttons-container{
   position: fixed;
   bottom: 0;
   left: 0;
 }
 
-.resetButton:hover {
-  color: $reset-button-hover-color;
+.control-buttons-container__control-button {
+  border: none;
+  background-color: transparent;
+  font-size: $control-button-font-size;
+  color: $control-button-color;
+}
+
+.control-buttons-container__control-button:hover {
+  color: $control-button-hover-color;
 }
 
 .audio-file{

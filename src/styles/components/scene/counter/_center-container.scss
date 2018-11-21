@@ -1,5 +1,7 @@
 $horizontal-line-color: $main-inactivity-color;
 
+$red-timer-text-color: #e74c3c;
+
 $max-logo-width: 70%;
 
 $timer-font-size: 15rem;
@@ -52,6 +54,10 @@ $dseconds-span-font-size: 0.65em;
 
 .timer-container__dseconds-span {
   font-size: $dseconds-span-font-size;
+}
+
+.timer-container__content--red {
+  color: $red-timer-text-color;
 }
 
 .center-pane__line {
