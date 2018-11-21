@@ -6,7 +6,8 @@
   "main": "src/app.js",
   "license": "MIT",
   "scripts": {
-    "build": "webpack",
+    "build:dev": "webpack",
+    "build:prod": "webpack -p",
     "dev-server": "webpack-dev-server"
   },
   "dependencies": {
