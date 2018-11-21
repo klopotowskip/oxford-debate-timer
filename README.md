@@ -10,15 +10,34 @@ Kiedy pojawi się widok czasomierza, aby rozpocząć mowę pierwszego mówcy nal
 Aby zakolejkować mowę w trybie ad vocem należy kliknąć przycisk znajdujący się w dolnej części lewego i prawego panela. Mowa ad vocem rozpocznie się po zakończeniu mowy obecnego mówcy i kliknięciu "Enter".
 
 ### Personalizacja
-Czasomierz można dowolnie personalizować. Aby domyślne logo zmienić na własne należy usunąć plik _logo.png_ z katalogu _images_ i zastąpić go plikiem własnego loga (**WAŻNE!** Nowy plik też musi mieć nazwę _logo.png_ inaczej nie będzie działać). Należy dobrać logo o odpowiednich proporcjach rozmiarów (domyślne logo ma proporcje 3:2), aby nie psuło ono układu czasomierza (trzeba po prostu sprawdzić jak prezentuje się nowe logo i ewentualnie przeskalować je lub dociąć używając jednej z wielu dostępnych aplikacji do obróbki grafiki).
+Czasomierz można dowolnie personalizować. Aby domyślne logo (plik _logo.png_), ikonę strony (_favicon.png_) lub tło strony (_qblks.png_) należy zastąpić ich pliki w katalogu _images_ własnymi plikami (**WAŻNE!** Nowy plik musi mieć tą samą nazwę i roszerzenie, inaczej nie będzie działać). Należy dobrać logo o odpowiednich proporcjach rozmiarów (domyślne logo ma proporcje 3:2), aby nie psuło ono układu czasomierza (trzeba po prostu sprawdzić jak prezentuje się nowe logo i ewentualnie przeskalować je lub dociąć używając jednej z wielu dostępnych aplikacji do obróbki grafiki).<br>
+Aby zmienić domyślne dźwięki należy zastąpić pliki _hit.ogg_ (dźwięk krótki) oraz _end.ogg_ własnymi analogicznie, jak powyżej (wciąż należy pamiętać, aby nowe pliki miały tą samą nazwę oraz rozszerzenie)
 
-Aby zmienić kolorystykę czasomierza należy zmienić wartości zmiennych w plikach w katalogach _src/styles_. Wymaga to jednak ponownego zbudowania projektu (patrz w sekcji 'Budowanie projektu'), i jest bardziej zaawansowaną operacją wymagającą podstawowej wiedzy o kaskadowych arkuszach stylów CSS.
+Aby zmienić kolorystykę czasomierza należy zmienić wartości zmiennych w plikach w katalogach _src/styles_. Wymaga to jednak ponownego zbudowania projektu (patrz w sekcji 'Importowanie projektu' i 'Budowanie projektu'), i jest bardziej zaawansowaną operacją wymagającą podstawowej wiedzy o kaskadowych arkuszach stylów CSS.
+
+### Importowanie projektu
+Aby edytować ten projekt należy go najpierw poprawnie zainstalować. Wymaga to zainstalowanego na komputerze [GITa](https://git-scm.com/), [Yarna](https://yarnpkg.com/en/) oraz [Node.js](https://nodejs.org/en/) (wymagany do działania Yarna). Następnie w oknie terminala należy wpisać poniższą sekwencję komend
+
+```bash
+$ git clone https://github.com/pietrek777/oxford-debate-timer.git
+$ cd oxford-debate-timer
+$ yarn install
+$ yarn upgrade
+```
+Po wykonaniu tych komend projekt zostanie pobrany wraz ze wszystkimi zależnościami i będzie możliwa jego edycja
+
+### Testowanie
+Aby testować, czyli sprawdzać na bieżąco działanie programu w fazie developmentu należy uruchomić projekt na serwerze testowym.
+```bash
+$ yarn run dev-server
+```
 
 ### Najczęściej zadawane pytania
 **Czasomierz wyświetla się w języku angielskim. Jak ustawić język czasomierza na Polski?**
 W tym celu należy zmienić preferowany język stron w przeglądarce na polski.
 
-Licencja: MIT License ([tekst orginalny](https://github.com/pietrek777/debate-timer/blob/master/LICENSE) | [polskie tłumaczenie](http://blaszyk-jarosinski.pl/wp-content/uploads/2008/05/licencja-mit-tlumaczenie.pdf))
+Licencja: MIT License ([tekst orginalny](https://github.com/pietrek777/debate-timer/blob/master/LICENSE) | [polskie tłumaczenie](http://blaszyk-jarosinski.pl/wp-content/uploads/2008/05/licencja-mit-tlumaczenie.pdf))<br>
+Autor oprogramowania: Piotr Kłopotowski <[pietrek777@gmail.com](mailto:pietrek777@gmail.com)>
 
 ## [EN]
 
@@ -30,6 +49,26 @@ Firstly, in the setup form set the topic of debate, choose time per speaker, sho
 When the timer layout appears click **Space** to start the speech of first speaker. When speech of first speaker will end, stop the time hitting **Space** again (if time elapsed before you stopped, you don't have to click Space) and click **Enter** to move to next speaker.
 If you want to queue a short speech, click a button in the bottom of left and right pane. It will appear after a speech of current speaker.
 
-[License: MIT License](https://github.com/pietrek777/debate-timer/blob/master/LICENSE)
+### Importing project
+In order to edit this project you have to import it first. It requires [GIT](https://git-scm.com/), [Yarn](https://yarnpkg.com/en/) and [Node.js](https://nodejs.org/en/) (required by Yarn) installed on your computer. Then you have to enter comments from below into your bash
 
+```bash
+$ git clone https://github.com/pietrek777/oxford-debate-timer.git
+$ cd oxford-debate-timer
+$ yarn install
+$ yarn upgrade
+```
+After executing this commands project will be installed with all of it's dependencies.
+
+### Testing
+If you want to test the project while developing it, you have to run development server
+```bash
+$ yarn run dev-server
+```
+
+### FAQ
+**How can I change timer language to English?**
+Timer is choosing language based on your browser language preferences. If you want to change the language, change it in your browser settings.
+
+[License: MIT License](https://github.com/pietrek777/debate-timer/blob/master/LICENSE)<br>
 Created by: Piotr Kłopotowski
