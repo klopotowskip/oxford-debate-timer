@@ -385,7 +385,7 @@ export default class CounterScene extends React.Component {
     this.setState((prevState) => ({
       soundsEnabled: !prevState.soundsEnabled
     }), () => { localStorage.setItem('soundsEnabled', this.state.soundsEnabled); });
-
+    document.getElementById("sound-control-button").blur();
   }
 
   render(){
@@ -438,7 +438,12 @@ export default class CounterScene extends React.Component {
         <button className="control-buttons-container__control-button control-buttons-container__reset-button" onClick={this.props.resetApp}>
           <FontAwesomeIcon icon={undo} />
         </button>
-        <button className="control-buttons-container__control-button control-buttons-container__sound-button" onClick={this.switchSound}>
+        <button
+          className="control-buttons-container__control-button control-buttons-container__sound-button"
+          id="sound-control-button"
+          onClick={this.switchSound}
+          tabIndex="-1"
+        >
           {this.state.soundsEnabled ?
             <FontAwesomeIcon icon={soundsOn} />:
             <FontAwesomeIcon icon={soundsOff} />

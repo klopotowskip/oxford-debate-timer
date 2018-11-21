@@ -60,7 +60,7 @@ export default class TimerApp extends React.Component {
           })()
         }
         <div className="footer">
-          &copy; 2018 <a href="mailto:pietrek777@gmail.com">Piotr Kłopotowski</a> &bull; <a href="https://github.com/pietrek777/debate-timer/blob/master/LICENSE">MIT License</a> &bull; <a href="https://github.com/pietrek777/debate-timer">This project on Github.</a>
+          &copy; 2018 <a href="mailto:pietrek777@gmail.com">Piotr Kłopotowski</a> &bull; <a href="https://github.com/pietrek777/oxford-debate-timer/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a> &bull; <a href="https://github.com/pietrek777/oxford-debate-timer" target="_blank" rel="noopener noreferrer">This project on Github.</a>
         </div>
       </div>
     );
