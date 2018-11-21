@@ -1,4 +1,4 @@
-# debate-timer
+# oxford-debate-timer
 ## [PL] (English version below)
 
 Zaawansowany czasomierz przeznaczony do [debat oksfordzkich](https://pl.wikipedia.org/wiki/Debata_oksfordzka).
