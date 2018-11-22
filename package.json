@@ -3,7 +3,7 @@
   "description": "Powerful timer app for Oxford Debates. Read more at this project Github repository.",
   "repository": "https://github.com/pietrek777/oxford-debate-timer.git",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "server/server.js",
   "license": "MIT",
   "scripts": {
     "serve": "live-server public",
