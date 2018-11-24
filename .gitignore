@@ -1,5 +1,13 @@
+#Yarn modules folder
 node_modules
+
+#As this project is using Yarn instead of npm this file only causes problem while deploying to Heroku (it shouldn't even exist, but even it will appear in this project it will be discluded because of the line below)
+package-lock.json
+
+#Yarn error log
 yarn-error.log
+
+#Builded assets
 public/bundle.js
 public/bundle.js.map
 public/styles.css
