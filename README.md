@@ -105,4 +105,4 @@ If you don't want to change timer sourcecode, or you just want to change it's st
 Timer is choosing language based on your browser language preferences. If you want to change the language, change it in your browser settings.
 
 [License: MIT License](https://github.com/pietrek777/debate-timer/blob/master/LICENSE)<br>
-Created by: Piotr Kłopotowski
+Created by: Piotr Kłopotowski <[pietrek777@gmail.com](mailto:pietrek777@gmail.com)>
