@@ -6,7 +6,9 @@ import RightPane from './RightPane';
 import Side from '~/src/model/Side';
 import SpeechType from '~/src/model/SpeechType';
 
-import Speech from '~/src/model/Speech'
+import Speech from '~/src/model/Speech';
+
+import EndingModal from './EndingModal';
 
 import { getCounterMessages } from '~/src/locale/locale-supplier';
 
@@ -78,7 +80,10 @@ export default class CounterScene extends React.Component {
     hasEnded: false,
 
     //Defines whether sounds are enabled
-    soundsEnabled: parseBool(localStorage.getItem('soundsEnabled'))
+    soundsEnabled: parseBool(localStorage.getItem('soundsEnabled')),
+
+    //Defines whether ending modal is open at this moment
+    openEndingModal: false
   }
 
   timeout = undefined;
@@ -88,6 +93,9 @@ export default class CounterScene extends React.Component {
 
   endingTimesShort = []; //Array stores timestamps in which warning sounds are ending (for short speeches)
   endingTimesLong = []; //Array stores timestamps in which warning sounds are ending (for long speeches)
+
+
+  speechEndTimes = []; //Array stores informations about past speeches time of end
 
   defineAlarmsTimes = () => {
     const sduration = this.props.metadata.sduration;
@@ -109,7 +117,7 @@ export default class CounterScene extends React.Component {
     this.startingTimesLong.push(300 + upperMargin);
     this.endingTimesLong.push(300 - lowerMargin);
 
-  }
+  };
 
   componentDidMount(){
     window.setTimeout(() => {
@@ -149,7 +157,7 @@ export default class CounterScene extends React.Component {
       if(this.state.paused && this.state.hasStarted) this.pushQueue();
       else this.pauseTimer();
     }
-  }
+  };
 
   reset = () => {
     this.setState(() => ({
@@ -157,7 +165,7 @@ export default class CounterScene extends React.Component {
       side: Side.LEFT,
       queue: INIT_QUEUE
     }));
-  }
+  };
 
   printState = () => {
     if(this.state.hasEnded) return "";
@@ -172,7 +180,7 @@ export default class CounterScene extends React.Component {
     }
     if(inShort) return side + " – " + messages.SHORT_SPEECH_LABEL;
     else return this.state.speaker + " " + side;
-  }
+  };
 
   getTimerState = () => {
     let time = this.state.time;
@@ -197,7 +205,7 @@ export default class CounterScene extends React.Component {
         {text}<span className="timer-container__dseconds-span">{"." + dseconds}</span>
       </div>
     );
-  }
+  };
 
   startTimer = (time) => {
     this.setState({
@@ -206,7 +214,7 @@ export default class CounterScene extends React.Component {
     }, () => {
       this.countdown();
     });
-  }
+  };
 
   countdown = () => {
     const time = parseInt(this.state.time);
@@ -250,7 +258,7 @@ export default class CounterScene extends React.Component {
     } else {
       this.pauseTimer(true);
     }
-  }
+  };
 
   /**
    * Pauses timer
@@ -266,7 +274,8 @@ export default class CounterScene extends React.Component {
     }, () => {
       window.clearTimeout(this.timeout);
     });
-  }
+  };
+
   resumeTimer = () => {
     if(this.state.time){
       this.setState({
@@ -277,9 +286,15 @@ export default class CounterScene extends React.Component {
         this.countdown();
       });
     }
-  }
+  };
 
   pushQueue = () => {
+    this.speechEndTimes = [...this.speechEndTimes, {
+      speaker: this.state.speaker,
+      side: this.state.side,
+      time: this.state.time
+    }];
+
     if(this.state.queue.length == 0){
       this.die();
       return;
@@ -304,7 +319,7 @@ export default class CounterScene extends React.Component {
         );
         break;
     }
-  }
+  };
 
   prepareLongSpeech = (speaker, side, queue) => {
     this.setState({
@@ -318,7 +333,7 @@ export default class CounterScene extends React.Component {
       time: this.props.metadata.lduration,
       timerHeader: messages.TIME_LEFT
     });
-  }
+  };
 
   prepareShortSpeech = (side, queue) => {
     this.setState(() => ({
@@ -331,7 +346,7 @@ export default class CounterScene extends React.Component {
       time: this.props.metadata.sduration,
       timerHeader: messages.TIME_LEFT
     }));
-  }
+  };
 
   handleUseLeftShort = () => {
 
@@ -345,7 +360,7 @@ export default class CounterScene extends React.Component {
         ), ...prevState.queue
       ]
     }));
-  }
+  };
 
   handleUseRightShort = () => {
 
@@ -360,14 +375,14 @@ export default class CounterScene extends React.Component {
       ]
     }));
 
-  }
+  };
 
   canUseShort = (side) => {
     return (
       (this.state.side !== side) &&
       (this.state.speaker !== 4) &&
       (this.state.shortQueued === false));
-  }
+  };
 
   /**
    * End the debate
@@ -377,21 +392,35 @@ export default class CounterScene extends React.Component {
     this.setState(() => ({
       timerHeader: messages.END_OF_EVENT,
       playEndSound: false,
-      hasEnded: 5 //When event ends, we don't want any of the icons to be highlighted
+      openEndingModal: true,
+      hasEnded: true //When event ends, we don't want any of the icons to be highlighted
     }));
-  }
+  };
+
+  closeModal = () => {
+    this.setState(() => ({
+      openEndingModal: false
+    }));
+  };
 
   switchSound = () => {
     this.setState((prevState) => ({
       soundsEnabled: !prevState.soundsEnabled
     }), () => { localStorage.setItem('soundsEnabled', this.state.soundsEnabled); });
     document.getElementById("sound-control-button").blur();
-  }
+  };
 
   render(){
     return (
 
       <div>
+        {this.state.openEndingModal ?
+          <EndingModal
+            closeModal={this.closeModal}
+            speechEndTimes={this.speechEndTimes}
+          />
+        : ""}
+
         {this.state.playEndSound ?
           <audio src="audio/end.ogg" loop autoPlay></audio>
         : ""}
